@@ -99,3 +99,4 @@ cd ../frontend && npm install && npm run dev
 > We don’t just write code.  
 > We **encrypt ideas**.  
 > BLACKCODE is a **digital fortress** — minimal surface, maximal power.  
+
