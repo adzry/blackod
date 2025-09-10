@@ -1,90 +1,101 @@
-# BLACKCODE — Full Stack AI App
+# 🖤 BLACKCODE AI  
 
-BLACKCODE is a **production-ready full-stack AI assistant** built with:
-- **Frontend:** React + Vite + White Minimal UI + Nginx
-- **Backend:** Node.js (Express) + MongoDB + JWT Authentication
-- **AI Engine:** OpenAI (gpt-4o-mini by default)
-- **Deployment:** Docker & Docker Compose
-- **Domain:** Preconfigured for https://blackcode.lovable.app
+> **Secure. Minimal. Precise.**  
+> A full-stack AI companion built for professionals who demand **trust, performance, and elegance**.  
+
+![BLACKCODE Banner](https://dummyimage.com/1200x300/000000/ffffff&text=BLACKCODE+AI)  
 
 ---
 
-## 📂 Project Structure
-```
-blackcode-ai-full/
-├── backend/        # Node.js backend (Express, MongoDB, JWT)
-├── frontend/       # React (Vite) frontend + Nginx
-└── docker-compose.yml
-```
+## ✨ Features
+- 🔑 Authentication – JWT-based, secure by design  
+- 💬 Conversations – Persistent AI chat with OpenAI GPT  
+- 🛡 Security – Hardened backend with Helmet & rate limiting  
+- ⚡ Fast Frontend – React + Vite + Tailwind + Nginx  
+- 🗄 Data Layer – MongoDB with schema-driven persistence  
+- 🐳 Deployment Ready – Docker Compose + Lovable AI support  
 
 ---
 
-## 🚀 Quick Start (Local)
-1. Unzip the project
-2. Run:
-```bash
-cd blackcode-ai-full
-export OPENAI_API_KEY="your-openai-key"
-export JWT_SECRET="super-long-random-secret"
-docker-compose up --build
-```
-3. Access:
-- Frontend → [http://localhost](http://localhost)
-- Backend API → [http://localhost:5000/api/v1](http://localhost:5000/api/v1)
+## 📂 Project Layout
+\`\`\`
+blackcode-ai/
+├── backend/         # Express + MongoDB + JWT
+├── frontend/        # React + Vite + Tailwind + Nginx
+├── docker-compose.yml
+├── lovable.yaml     # Lovable deployment config
+├── .env.example     # Env placeholders
+└── README.md
+\`\`\`
 
 ---
 
-## 🌐 Lovable Deployment
-This bundle is **Lovable-ready**:
-- Default domain: `https://blackcode.lovable.app`
-- All `/api/*` requests proxy to the backend automatically
+## ⚙️ Environment Variables
+Sensitive values live **outside GitHub**.
 
-### Steps:
-1. Import this repo into Lovable
-2. Set Environment Variables in Lovable Dashboard:
-   - `OPENAI_API_KEY` → your OpenAI key
-   - `JWT_SECRET` → a long random string
-   - `CORS_ORIGIN` → `https://blackcode.lovable.app`
-   - `VITE_API_BASE` → `https://blackcode.lovable.app/api/v1`
-3. Deploy 🚀
+\`\`\`env
+OPENAI_API_KEY=your-openai-api-key-here
+JWT_SECRET=your-generated-secret-here
+CORS_ORIGIN=http://localhost:5173
+VITE_API_BASE=http://localhost:5000/api/v1
+\`\`\`
 
 ---
 
-## 🔑 Environment Variables
-
-### Backend
-```
-MONGO_URI=mongodb://mongodb:27017/blackcode
-JWT_SECRET=super-long-random-secret
-JWT_EXPIRES_IN=90d
-OPENAI_API_KEY=your-openai-key
-PORT=5000
-CORS_ORIGIN=https://blackcode.lovable.app
-```
-
-### Frontend
-```
-VITE_API_BASE=https://blackcode.lovable.app/api/v1
-```
+## 🖥 Local Development (Termux/Node)
+\`\`\`bash
+git clone https://github.com/adzry/blackcode-ai.git
+cd blackcode-ai
+cp .env.example .env
+nano .env   # fill real keys
+export $(grep -v '^#' .env | xargs)
+cd backend && npm install && npm run dev
+cd ../frontend && npm install && npm run dev
+\`\`\`
 
 ---
 
-## 🛡️ Security
-- **Helmet** for HTTP headers
-- **Rate limiting** (120 requests/minute)
-- **JWT auth** for sessions
-- **MongoDB** persistence
+## 🚀 Deployment (Lovable)
+1. Import repo → `adzry/blackcode-ai`  
+2. Branch → `main`  
+3. Add env vars in Lovable:  
+   \`\`\`env
+   OPENAI_API_KEY=sk-your-openai-key
+   JWT_SECRET=your-32-byte-secret
+   CORS_ORIGIN=https://blackod.lovable.app
+   VITE_API_BASE=https://blackod.lovable.app/api/v1
+   \`\`\`
+4. Deploy → https://blackod.lovable.app  
 
 ---
 
-## 🎨 UI Features
-- White minimal theme (Lovable-style)
-- Login / Signup in one clean screen
-- Sidebar for conversations
-- Chat bubbles for user & assistant messages
-- Responsive layout
+## ✅ Post-Deploy Checklist
+- [ ] Sign up → new user stored in MongoDB  
+- [ ] Login → JWT session works  
+- [ ] Chat → AI response saved in DB  
+- [ ] Refresh → conversation persists  
 
 ---
 
-## 📄 License
-This project is released for internal BLACKCODE / Lovable deployment.
+## 🛡 Security Design
+- JWT auth  
+- Bcrypt password hashing  
+- Helmet + CORS enforcement  
+- Rate limiting  
+- `.dockerignore` + `.gitignore`  
+
+---
+
+## 🧩 Tech Stack
+- **Frontend:** React, Vite, TailwindCSS, Nginx  
+- **Backend:** Node.js, Express, JWT, Mongoose  
+- **Database:** MongoDB 7.0  
+- **AI Engine:** OpenAI GPT  
+- **Deployment:** Docker Compose + Lovable AI  
+
+---
+
+## 🖤 BLACKCODE Philosophy
+> We don’t just write code.  
+> We **encrypt ideas**.  
+> BLACKCODE is a **digital fortress** — minimal surface, maximal power.  
