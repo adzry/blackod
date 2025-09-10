@@ -1,0 +1,90 @@
+name: BLACKCODE Autonomous Deploy
+
+on:
+  # Triggered manually or by backend dispatch
+  repository_dispatch:
+    types: [ai-deploy-request]
+
+jobs:
+  analyze-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '18'
+
+      - name: Gather Logs & Context
+        run: |
+          echo "Collecting latest git diff + logs..."
+          git log -n 5 > recent_commits.log
+          echo "---- DIFF ----" >> recent_commits.log
+          git diff HEAD~1..HEAD >> recent_commits.log
+          echo "RECENT_LOGS<<EOF" >> $GITHUB_ENV
+          cat recent_commits.log >> $GITHUB_ENV
+          echo "EOF" >> $GITHUB_ENV
+
+      - name: AI Analysis (OpenAI)
+        id: ai
+        run: |
+          echo "Sending logs to BLACKCODE AI..."
+          RESPONSE=$(curl -s https://api.openai.com/v1/chat/completions \
+            -H "Content-Type: application/json" \
+            -H "Authorization: Bearer ${{ secrets.OPENAI_API_KEY }}" \
+            -d "{
+              \"model\": \"gpt-4o-mini\",
+              \"messages\": [
+                {\"role\": \"system\", \"content\": \"You are BLACKCODE’s DevOps intelligence. Analyze logs, recommend fixes, and output JSON only.\"},
+                {\"role\": \"user\", \"content\": \"Logs: $RECENT_LOGS\"}
+              ],
+              \"temperature\": 0.1
+            }" | jq -r '.choices[0].message.content')
+
+          echo "AI_OUTPUT=$RESPONSE" >> $GITHUB_ENV
+
+      - name: Apply AI Suggestions
+        run: |
+          echo "${{ env.AI_OUTPUT }}" > ai-analysis.json
+          echo "---- AI ANALYSIS ----"
+          cat ai-analysis.json
+          RECOMMENDATION=$(jq -r '.recommendation // empty' ai-analysis.json)
+          if [ -n "$RECOMMENDATION" ]; then
+            echo "Applying AI recommendation..."
+            echo "$RECOMMENDATION" > ai_patch.txt
+            # Example: Could patch config files or Dockerfile
+            # For now, just storing in logs for review
+          fi
+
+      - name: Commit AI Changes (to ai-updates branch)
+        run: |
+          git checkout -b ai-updates || git checkout ai-updates
+          git config user.name "BLACKCODE AI Agent"
+          git config user.email "ai@blackcode.com"
+          echo "AI OPTIMIZATION" >> ai-ops.log
+          git add .
+          git commit -m "AI Optimization: automated update"
+          git push origin ai-updates --force
+
+      - name: Create Pull Request (optional safety)
+        uses: peter-evans/create-pull-request@v6
+        with:
+          token: ${{ secrets.GH_TOKEN }}
+          branch: ai-updates
+          title: "🤖 AI Optimization"
+          body: "Automated update proposed by BLACKCODE AI. Review before merge."
+          labels: ai,automation,blackcode
+
+      - name: Deploy to Lovable
+        if: github.ref == 'refs/heads/main'
+        run: |
+          echo "Triggering Lovable deployment..."
+          curl -X POST "https://api.lovable.ai/deploy" \
+            -H "Authorization: Bearer ${{ secrets.LOVABLE_API_KEY }}" \
+            -H "Content-Type: application/json" \
+            -d '{"project_id": "${{ secrets.LOVABLE_PROJECT_ID }}"}'
