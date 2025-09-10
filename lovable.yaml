@@ -1,0 +1,61 @@
+version: "1.0"
+
+project:
+  name: blackcode-ai
+  description: "BLACKCODE — Full-stack AI app with React, Node.js, MongoDB, JWT auth, and OpenAI integration"
+
+services:
+  backend:
+    build: ./backend
+    cache: true
+    env:
+      - name: OPENAI_API_KEY
+        required: true
+      - name: JWT_SECRET
+        required: true
+      - name: CORS_ORIGIN
+        default: "https://blackod.lovable.app"
+    ports:
+      - 5000
+    depends_on:
+      - mongodb
+    healthcheck:
+      path: /api/v1/auth/login
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  frontend:
+    build: ./frontend
+    cache: true
+    env:
+      - name: VITE_API_BASE
+        default: "https://blackod.lovable.app/api/v1"
+    ports:
+      - 80
+    depends_on:
+      - backend
+    healthcheck:
+      path: /
+      interval: 30s
+      timeout: 5s
+      retries: 3
+
+  mongodb:
+    image: mongo:7.0
+    volumes:
+      - mongodb_data:/data/db
+    ports:
+      - 27017
+    healthcheck:
+      test: ["CMD", "mongo", "--eval", "db.adminCommand('ping')"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+volumes:
+  mongodb_data:
+
+domains:
+  - host: blackod.lovable.app
+    service: frontend
