@@ -1,7 +1,7 @@
 version: "1.0"
 
 project:
-  name: blackcode-ai
+  name: blackod
   description: "BLACKCODE — Full-stack AI app with React, Node.js, MongoDB, JWT auth, and OpenAI integration"
 
 services:

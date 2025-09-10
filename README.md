@@ -19,7 +19,7 @@
 
 ## 📂 Project Layout
 \`\`\`
-blackcode-ai/
+blackod/
 ├── backend/         # Express + MongoDB + JWT
 ├── frontend/        # React + Vite + Tailwind + Nginx
 ├── docker-compose.yml
@@ -44,8 +44,8 @@ VITE_API_BASE=http://localhost:5000/api/v1
 
 ## 🖥 Local Development (Termux/Node)
 \`\`\`bash
-git clone https://github.com/adzry/blackcode-ai.git
-cd blackcode-ai
+git clone https://github.com/adzry/blackod.git
+cd blackod
 cp .env.example .env
 nano .env   # fill real keys
 export $(grep -v '^#' .env | xargs)
@@ -56,7 +56,7 @@ cd ../frontend && npm install && npm run dev
 ---
 
 ## 🚀 Deployment (Lovable)
-1. Import repo → `adzry/blackcode-ai`  
+1. Import repo → `adzry/blackod`  
 2. Branch → `main`  
 3. Add env vars in Lovable:  
    \`\`\`env
